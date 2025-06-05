@@ -28,7 +28,6 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-      AUTH_SECRET: ${AUTH_SECRET}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
@@ -61,6 +60,19 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     ports:
       - "${PHPMYADMIN_PORT}:80"
+    networks:
+      - database
+  
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "${WEB_PORT}:3000"
+    volumes:
+      - ./front:/var/www/html/ #map le dossier front vers le volume du serveur 
+      - /var/www/html/node_modules #empeche l'overwrite du dossier node_modules pour ne pas casser les dépendances
     networks:
       - database
 
