@@ -1,3 +1,4 @@
 .env
 /database
 /app/vendor
+.vscode
