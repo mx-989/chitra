@@ -30,6 +30,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    expose:
+      - "9000"
     networks:
       - database
   mysql:
