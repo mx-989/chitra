@@ -1,12 +1,11 @@
-FROM node:18-alpine
+# front/Dockerfile
+FROM nginx:alpine
 
-WORKDIR /var/www/html
+# Copier la configuration nginx
+COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY package*.json ./
-RUN npm install
-
-#COPY . .
+# Le volume sera monté, donc pas besoin de copier les fichiers
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["nginx", "-g", "daemon off;"]
