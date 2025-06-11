@@ -23,3 +23,5 @@ class HttpException extends Exception {
         return $this->httpCode;
     }
 }
+
+?>

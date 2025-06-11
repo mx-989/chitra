@@ -143,3 +143,5 @@ class Router {
         return $params;
     }
 }
+
+?>

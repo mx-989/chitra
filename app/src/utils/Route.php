@@ -14,3 +14,5 @@ class Route {
         $this->middlewares = $middlewares;
     }
 }
+
+?>
