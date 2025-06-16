@@ -1,4 +1,5 @@
 .env
 /database
 /app/vendor
-.vscode
+/.vscode
+/app/uploads

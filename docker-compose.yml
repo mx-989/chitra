@@ -20,6 +20,7 @@ services:
     volumes:
       - ./app:/var/www/html
       - ./xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     depends_on:
       - mysql
     environment:
@@ -49,6 +50,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
       - ./database:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf:ro
     networks:
       - database
 
@@ -66,15 +68,14 @@ services:
       - database
   
   frontend:
-    build:
-      context: ./front
-      dockerfile: Dockerfile
+    image: nginx:alpine
     container_name: frontend
     ports:
       - "${WEB_PORT}:3000"
     volumes:
-      - ./front:/var/www/html/ #map le dossier front vers le volume du serveur 
-      - /var/www/html/node_modules #empeche l'overwrite du dossier node_modules pour ne pas casser les dépendances
+      - ./front:/var/www/html
+      - ./app/uploads:/var/www/html/uploads:ro
+      - ./front/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - database
 
