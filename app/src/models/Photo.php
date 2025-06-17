@@ -189,31 +189,27 @@ class Photo extends SqlConnect {
     }
 
     
-public function getAllAccessiblePhotos($userId, $page = 1, $limit = 50) {
-    $offset = ($page - 1) * $limit;
+    public function getAllAccessiblePhotos($userId) {
+        $query = "SELECT p.*, a.title as album_name, u.name as owner_name
+                FROM photos p
+                JOIN albums a ON p.album_id = a.id
+                JOIN users u ON p.uploaded_by = u.id
+                WHERE p.uploaded_by = :userId                                    
+                OR a.user_id = :userId                                          
+                OR a.id IN (SELECT album_id FROM shares WHERE user_id = :userId)
+                ORDER BY p.date_taken DESC";
     
-    $query = "SELECT p.*, a.title as album_name, u.name as owner_name
-              FROM photos p
-              JOIN albums a ON p.album_id = a.id
-              JOIN users u ON p.uploaded_by = u.id
-              WHERE p.uploaded_by = :userId
-              OR a.id IN (SELECT album_id FROM shares WHERE user_id = :userId)
-              ORDER BY p.date_taken DESC
-              LIMIT :limit OFFSET :offset";
-              
-    $stmt = $this->db->prepare($query);
-    $stmt->bindParam(':userId', $userId, \PDO::PARAM_INT);
-    $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
-    $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
-    $stmt->execute();
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':userId', $userId, \PDO::PARAM_INT);
+        $stmt->execute();
     
-    $photos = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $photos = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     
-    foreach ($photos as &$photo) {
-        $photo['tags'] = json_decode($photo['tags'], true) ?? [];
-    }
+        foreach ($photos as &$photo) {
+            $photo['tags'] = json_decode($photo['tags'], true) ?? [];
+        }
     
-    return $photos;
+        return $photos;
     }
 }
 
