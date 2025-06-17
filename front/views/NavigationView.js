@@ -482,7 +482,7 @@ async showTimelineSection() {
     this.contentArea.innerHTML = `
         <div id="timeline-section" class="content-section">
             <div class="stats-container">
-                <div class="stats-card">
+                <div class="stats-card" data-tooltip="(Seulement vos uploads)">
                     <div class="stats-icon photos">
                         <i class="fas fa-images"></i>
                     </div>
@@ -490,7 +490,7 @@ async showTimelineSection() {
                     <div class="stats-label">Photos</div>
                 </div>
                 
-                <div class="stats-card">
+                <div class="stats-card" data-tooltip="(Seulement vos albums)">
                     <div class="stats-icon albums">
                         <i class="fas fa-folder"></i>
                     </div>
@@ -506,7 +506,7 @@ async showTimelineSection() {
                     <div class="stats-label">Favoris</div>
                 </div>
                 
-                <div class="stats-card">
+                <div class="stats-card" data-tooltip="(Seulement vos uploads)">
                     <div class="stats-icon storage">
                         <i class="fas fa-hdd"></i>
                     </div>
