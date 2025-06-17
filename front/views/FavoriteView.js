@@ -409,7 +409,7 @@ class FavoriteView {
             }
         });
 
-        if (!isFavorite && this.isOnFavoritesPage()) {
+        if (!isFavorite && window.app.controllers.favorite.isOnFavoritesPage()) {
             const favoriteItem = document.querySelector(`.favorite-photo-item[data-photo-id="${photoId}"]`);
             if (favoriteItem) {
                 favoriteItem.style.transition = 'all 0.3s ease';
@@ -429,11 +429,6 @@ class FavoriteView {
                 }, 300);
             }
         }
-    }
-
-    isOnFavoritesPage() {
-        return window.location.pathname === '/favorites' || 
-               document.querySelector('#favorites-section')?.style.display !== 'none';
     }
 
     showInfo(message) {

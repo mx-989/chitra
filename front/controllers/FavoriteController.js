@@ -238,8 +238,7 @@ class FavoriteController {
     }
 
     isOnFavoritesPage() {
-        return window.location.pathname === '/favorites' || 
-               document.querySelector('#favorites-section')?.style.display !== 'none';
+        return window.app?.controllers?.navigation?.getCurrentSection() === 'favorites';
     }
 
     getFavorites() {
