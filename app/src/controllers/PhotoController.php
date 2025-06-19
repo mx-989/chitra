@@ -101,7 +101,7 @@ class PhotoController extends Controller {
             return 'Fichier temporaire invalide';
         }
         
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'tiff', 'tif'];
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
        
         if (!in_array($fileExtension, $allowedExtensions)) {
@@ -113,12 +113,7 @@ class PhotoController extends Controller {
             'image/pjpeg',
             'image/png',
             'image/gif',
-            'image/webp',
-            'image/bmp',
-            'image/x-ms-bmp',
-            'image/x-windows-bmp',
-            'image/tiff',
-            'image/x-tiff'
+            'image/webp'
         ];
         
         $realMimeType = null;
@@ -145,10 +140,7 @@ class PhotoController extends Controller {
             IMAGETYPE_JPEG,
             IMAGETYPE_PNG,
             IMAGETYPE_GIF,
-            IMAGETYPE_WEBP,
-            IMAGETYPE_BMP,
-            IMAGETYPE_TIFF_II,
-            IMAGETYPE_TIFF_MM
+            IMAGETYPE_WEBP
         ];
         
         if (!in_array($imageInfo[2], $allowedImageTypes)) {
