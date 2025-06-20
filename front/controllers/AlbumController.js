@@ -8,6 +8,7 @@ class AlbumController {
         this.albums = [];
         this.currentAlbum = null;
         this.coverImage = null;
+        this.uploadButtonObserver = null;
         this.setupEventListeners();
     }
 
@@ -149,35 +150,72 @@ class AlbumController {
         }
     }
 
-    // Affiche les détails d'un album spécifique et charge ses photos
+    // Affiche les détails d'un album spécifique et charge ses photos, avec logique pour cacher le boutton d'upload si pas de permissions
     async showAlbum(albumId) {
-        try {
-            this.view.showLoading();
+    try {
+        this.view.showLoading();
 
-            const response = await fetch(`${window.app.config.API_URL}/albums/${albumId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include'
-            });
-            const data = await response.json();
-
-            if (response.ok) {
-                this.currentAlbum = data.album;
-                this.view.renderAlbumDetail(this.currentAlbum);
-                
-                const photosEvent = new CustomEvent('photo:loadAlbumPhotos', {
-                    detail: { albumId: albumId }
-                });
-                document.dispatchEvent(photosEvent);
-            } else {
-                throw new Error(data.error || 'Album non trouvé');
-            }
-        } catch (error) {
-            console.error('Erreur chargement album:', error);
-            showNotification(error.message, 'error');
+        if (this.uploadButtonObserver) {
+            this.uploadButtonObserver.disconnect();
+            this.uploadButtonObserver = null;
         }
+
+        const response = await fetch(`${window.app.config.API_URL}/albums/${albumId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+            this.currentAlbum = data.album;
+            this.view.renderAlbumDetail(this.currentAlbum);
+            
+            const album = this.currentAlbum;
+            const canAdd = album.user_permission === 'add' || album.user_permission === 'owner';
+            
+            let killTimer = null;
+            
+            this.uploadButtonObserver = new MutationObserver(() => {
+                const uploadButtons = document.querySelectorAll('[data-action="upload"]');
+                
+                if (uploadButtons.length > 0) {
+                    uploadButtons.forEach(button => {
+                        button.style.visibility = canAdd ? 'visible' : 'hidden';
+                    });
+                    
+                    clearTimeout(killTimer);
+                    killTimer = setTimeout(() => {
+                        if (this.uploadButtonObserver) {
+                            this.uploadButtonObserver.disconnect();
+                            this.uploadButtonObserver = null;
+                        }
+                    }, 500);
+                }
+            });
+            
+            this.uploadButtonObserver.observe(document.body, { childList: true, subtree: true });
+            
+            setTimeout(() => {
+                if (this.uploadButtonObserver) {
+                    this.uploadButtonObserver.disconnect();
+                    this.uploadButtonObserver = null;
+                }
+            }, 2000);
+            
+            const photosEvent = new CustomEvent('photo:loadAlbumPhotos', {
+                detail: { albumId: albumId }
+            });
+            document.dispatchEvent(photosEvent);
+        } else {
+            throw new Error(data.error || 'Album non trouvé');
+        }
+    } catch (error) {
+        console.error('Erreur chargement album:', error);
+        showNotification(error.message, 'error');
+    }
     }
 
     showCreateModal() {
