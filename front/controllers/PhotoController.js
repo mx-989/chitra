@@ -156,36 +156,6 @@ class PhotoController {
         }
     }
 
-    // Ajoute une photo aux favoris
-    async addFavorite(photoId) {
-        try {
-            const response = await fetch(`${window.app.config.API_URL}/favorites/${photoId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include'
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                if (data.already_favorite) {
-                    this.view.showInfo('Cette photo est déjà dans vos favoris');
-                } else {
-                    this.view.updateFavoriteButton(photoId, true);
-                    showNotification('Photo ajoutée aux favoris !', 'success');
-                    this.updateFavoritesStats();
-                }
-            } else {
-                throw new Error(data.error || 'Erreur lors de l\'ajout aux favoris');
-            }
-        } catch (error) {
-            console.error('Erreur ajout favori:', error);
-            showNotification(error.message, 'error');
-        }
-    }
-
     // Upload plusieurs photos dans un album avec suivi de progression
     async uploadPhotos(uploadData) {
         try {

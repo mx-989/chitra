@@ -14,14 +14,6 @@ class FavoriteController {
             this.toggleFavorite(event.detail.photoId);
         });
 
-        document.addEventListener('favorite:add', (event) => {
-            this.addFavorite(event.detail.photoId);
-        });
-
-        document.addEventListener('favorite:remove', (event) => {
-            this.removeFavorite(event.detail.photoId);
-        });
-
         document.addEventListener('favorite:loadAll', () => {
             this.loadFavorites();
         });
@@ -66,7 +58,7 @@ class FavoriteController {
         }
     }
 
-    // Bascule le statut favori d'une photo (ajoute ou retire)
+    // Ajoute ou retire une photo des favoris
     async toggleFavorite(photoId) {
         try {
             const response = await fetch(`${window.app.config.API_URL}/favorites/toggle/${photoId}`, {
@@ -108,78 +100,6 @@ class FavoriteController {
         }
     }
 
-    // Ajoute une photo aux favoris
-    async addFavorite(photoId) {
-        try {
-            const response = await fetch(`${window.app.config.API_URL}/favorites/${photoId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include'
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                if (data.already_favorite) {
-                    this.view.showInfo('Cette photo est déjà dans vos favoris');
-                } else {
-                    const photoView = window.app?.controllers?.photo?.view;
-                    if (photoView) {
-                        photoView.updateFavoriteButton(photoId, true);
-                        photoView.updatePhotoModalFavorite(photoId, true);
-                    }
-                    
-                    this.view.updateFavoriteButton(photoId, true);
-                    showNotification('Photo ajoutée aux favoris !', 'success');
-                    this.updateFavoritesStats();
-                }
-            } else {
-                throw new Error(data.error || 'Erreur lors de l\'ajout aux favoris');
-            }
-        } catch (error) {
-            console.error('Erreur ajout favori:', error);
-            showNotification(error.message, 'error');
-        }
-    }
-
-    // Retire une photo des favoris
-    async removeFavorite(photoId) {
-        try {
-            const response = await fetch(`${window.app.config.API_URL}/favorites/${photoId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include'
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                const photoView = window.app?.controllers?.photo?.view;
-                if (photoView) {
-                    photoView.updateFavoriteButton(photoId, false);
-                    photoView.updatePhotoModalFavorite(photoId, false);
-                }
-                
-                this.view.updateFavoriteButton(photoId, false);
-                showNotification('Photo retirée des favoris !', 'success');
-                this.updateFavoritesStats();
-
-                if (this.isOnFavoritesPage()) {
-                    this.loadFavorites();
-                }
-            } else {
-                throw new Error(data.error || 'Erreur lors de la suppression des favoris');
-            }
-        } catch (error) {
-            console.error('Erreur suppression favori:', error);
-            showNotification(error.message, 'error');
-        }
-    }
-
     // Vérifie si une photo est dans les favoris et met à jour le coeur
     async checkFavoriteStatus(photoId) {
         try {
@@ -212,7 +132,7 @@ class FavoriteController {
     // Met à jour le compteur de favoris
     async updateFavoritesStats() {
         try {
-            const response = await fetch(`${window.app.config.API_URL}/favorites?limit=1`, {
+            const response = await fetch(`${window.app.config.API_URL}/stats`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -221,19 +141,14 @@ class FavoriteController {
             });
             const data = await response.json();
 
-            if (response.ok) {
-                this.updateFavoritesCount(data.total || 0);
+            if (response.ok && data.success && data.stats) {
+                const favoritesCount = document.getElementById('favoritesCount');
+                if (favoritesCount) {
+                    favoritesCount.textContent = data.stats.favorites || 0;
+                }
             }
         } catch (error) {
-            console.error('Erreur mise à jour stats favoris:', error);
-        }
-    }
-
-    updateFavoritesCount(count) {
-        // Mettre à jour le compteur dans les statistiques
-        const favoritesCount = document.getElementById('favoritesCount');
-        if (favoritesCount) {
-            favoritesCount.textContent = count;
+            console.error('Erreur lors de la mise à jour du compteur de favoris:', error);
         }
     }
 

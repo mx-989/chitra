@@ -85,27 +85,6 @@ class Favorite extends SqlConnect {
         return $result['total'];
     }
     
-    public function getUserFavoritesByAlbum($userId) {
-        $query = "SELECT a.*, COUNT(f.id) as favorite_count
-                  FROM favorites f
-                  JOIN photos p ON f.photo_id = p.id
-                  JOIN albums a ON p.album_id = a.id
-                  WHERE f.user_id = :user_id
-                  GROUP BY a.id
-                  ORDER BY favorite_count DESC";
-        
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([':user_id' => $userId]);
-        
-        $albums = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
-        foreach ($albums as &$album) {
-            $album['tags'] = json_decode($album['tags'], true) ?? [];
-        }
-        
-        return $albums;
-    }
-    
     private function userCanAccessPhoto($userId, $photoId) {
         $query = "SELECT p.id 
                   FROM photos p

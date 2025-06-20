@@ -14,61 +14,20 @@ class FavoriteController extends Controller {
         $this->favoriteModel = new Favorite();
     }
 
-    // Ajoute une photo aux favoris de l'utilisateur
-    #[Route('POST', '/api/favorites/:photoId', [AuthMiddleware::class])]
-    public function addFavorite($photoId) {
-        session_start();
-        $userId = $_SESSION['user_id'];
-       
-        try {
-            $result = $this->favoriteModel->addFavorite($userId, $photoId);
-            return $result;
-        } catch (\Exception $e) {
-            http_response_code(400);
-            return ['error' => $e->getMessage()];
-        }
-    }
-
-    // Retire une photo des favoris de l'utilisateur
-    #[Route('DELETE', '/api/favorites/:photoId', [AuthMiddleware::class])]
-    public function removeFavorite($photoId) {
-        session_start();
-        $userId = $_SESSION['user_id'];
-       
-        try {
-            $result = $this->favoriteModel->removeFavorite($userId, $photoId);
-            return $result;
-        } catch (\Exception $e) {
-            http_response_code(400);
-            return ['error' => $e->getMessage()];
-        }
-    }
-
     // Récupère la liste des photos favorites (pour la liste des favoris)
     #[Route('GET', '/api/favorites', [AuthMiddleware::class])]
     public function getFavorites() {
         session_start();
         $userId = $_SESSION['user_id'];
-       
-        $limit = $this->params['limit'] ?? null; //limite car la fonction est appelée avec limit=1 pour obtenir le nombre de favoris
-        $offset = $this->params['offset'] ?? 0;
-        $groupBy = $this->params['group_by'] ?? null;
-       
+
         try {
-            if ($groupBy === 'album') {
-                $favorites = $this->favoriteModel->getUserFavoritesByAlbum($userId);
-                return ['favorites_by_album' => $favorites];
-            } else {
-                $favorites = $this->favoriteModel->getUserFavorites($userId, $limit, $offset);
-                $total = $this->favoriteModel->getUserFavoritesCount($userId);
-               
-                return [
-                    'favorites' => $favorites,
-                    'total' => $total,
-                    'limit' => $limit,
-                    'offset' => $offset
-                ];
-            }
+            $favorites = $this->favoriteModel->getUserFavorites($userId);
+            $total = $this->favoriteModel->getUserFavoritesCount($userId);
+
+            return [
+                'favorites' => $favorites,
+                'total' => $total
+            ];
         } catch (\Exception $e) {
             http_response_code(500);
             return ['error' => $e->getMessage()];
