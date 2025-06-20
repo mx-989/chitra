@@ -71,9 +71,15 @@ class Album extends SqlConnect {
     }
     
     public function delete($albumId) {
-        $query = "DELETE FROM photos WHERE album_id = :album_id";
+        $query = "SELECT id FROM photos WHERE album_id = :album_id";
         $stmt = $this->db->prepare($query);
         $stmt->execute([':album_id' => $albumId]);
+        $photoIds = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+        
+        $photoModel = new Photo();
+        foreach ($photoIds as $photoId) {
+            $photoModel->delete($photoId);
+        }
         
         $query = "DELETE FROM albums WHERE id = :id";
         $stmt = $this->db->prepare($query);
