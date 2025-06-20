@@ -611,7 +611,7 @@ class AlbumView {
                     <div class="upload-zone-modal" id="modalUploadZone">
                         <i class="fas fa-cloud-upload-alt fa-3x mb-3 text-muted-chitra"></i>
                         <h5>Glissez vos photos ici</h5>
-                        <input type="file" class="d-none" id="modalFileInput" multiple accept="image/*">
+                        <input type="file" class="d-none" id="modalFileInput" multiple accept="image/jpeg,image/png,image/gif,image/webp">
                         <button type="button" class="album-btn album-btn-secondary" onclick="document.getElementById('modalFileInput').click()">
                             <i class="fas fa-folder-open"></i>
                             Choisir des fichiers
