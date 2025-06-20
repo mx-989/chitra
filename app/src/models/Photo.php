@@ -143,7 +143,7 @@ class Photo extends SqlConnect {
         }
        
         if (!empty($query)) {
-            $sql .= " AND (p.description LIKE :query OR p.filename LIKE :query)";
+            $sql .= " AND (p.description LIKE :query)";
             $params[':query'] = '%' . $query . '%';
         }
        

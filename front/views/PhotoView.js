@@ -144,7 +144,7 @@ class PhotoView {
                 <div class="empty-state">
                     <i class="fas fa-search fa-4x text-muted-chitra mb-3"></i>
                     <h4>Aucun résultat</h4>
-                    <p class="text-muted-chitra">Essayez avec d'autres termes de recherche</p>
+                    <p class="text-muted-chitra">Aucune photo n'a "${this.escapeHtml(query)}" dans sa description.</p>
                 </div>
             `;
         } else {
