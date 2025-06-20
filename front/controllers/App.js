@@ -132,7 +132,7 @@ class App {
         });
     }
 
-    // Routes vers les URL
+    // Routes appelées par les URL
     setupRouting() {
         this.router.addRoute('/login', () => {
             this.showAuthInterface('login');
@@ -150,10 +150,6 @@ class App {
             this.controllers.navigation.showAlbums();
         }, { middleware: [RouterMiddleware.requireAuth] });
 
-        this.router.addRoute('/albums/:id', (params) => {
-            this.controllers.album.showAlbum(params.id);
-        }, { middleware: [RouterMiddleware.requireAuth] });
-
         this.router.addRoute('/favorites', () => {
             this.controllers.navigation.showFavorites();
         }, { middleware: [RouterMiddleware.requireAuth] });
@@ -164,10 +160,6 @@ class App {
 
         this.router.addRoute('/explore', () => {
             this.controllers.navigation.showExplore();
-        }, { middleware: [RouterMiddleware.requireAuth] });
-
-        this.router.addRoute('/upload', () => {
-            this.controllers.navigation.showUploadSection();
         }, { middleware: [RouterMiddleware.requireAuth] });
 
         this.router.addRoute('/profile', () => {

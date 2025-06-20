@@ -169,18 +169,4 @@ class ShareController {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
-
-    getSharedAlbums() {
-        return this.sharedAlbums;
-    }
-
-    copyLinkToClipboard(link) {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(link).then(() => {
-                showNotification('Lien copié dans le presse-papiers !', 'success');
-            }).catch(() => {
-                showNotification('Impossible de copier le lien', 'error');
-            });
-        } 
-    }
 }

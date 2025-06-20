@@ -269,24 +269,15 @@ class PhotoController {
         this.view.showUploadModal(albumId);
     }
 
-    // Met à jour les statistiques affichées de l'acceuil
-    updateStats() {
-        const photosCount = document.getElementById('photosCount');
-        const albumsCount = document.getElementById('albumsCount');
-        const favoritesCount = document.getElementById('favoritesCount');
-        const storageUsed = document.getElementById('storageUsed');
-
-        if (photosCount) photosCount.textContent = this.photos.length;
-        if (albumsCount) albumsCount.textContent = '2';
-        if (favoritesCount) favoritesCount.textContent = Math.floor(this.photos.length / 3);
-        if (storageUsed) storageUsed.textContent = '2.28 GB';
-    }
-
-    getCurrentPhotos() {
-        return this.photos;
-    }
-
     getPhotoById(photoId) {
         return this.photos.find(photo => photo.id == photoId);
     }
+
+    copyLinkToClipboard(link) {
+            navigator.clipboard.writeText(link).then(() => {
+                showNotification('Lien copié dans le presse-papiers !', 'success');
+            }).catch(() => {
+                showNotification('Impossible de copier le lien', 'error');
+            });
+        } 
 }

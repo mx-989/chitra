@@ -191,12 +191,4 @@ class CommentController {
         this.view.showCommentsModal(photoId, this.permission);
         this.loadComments(photoId);
     }
-
-    getCurrentComments() {
-        return this.comments;
-    }
-
-    getCommentById(commentId) {
-        return this.comments.find(comment => comment.id == commentId);
-    }
 }

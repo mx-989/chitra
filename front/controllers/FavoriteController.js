@@ -156,10 +156,6 @@ class FavoriteController {
         return window.app?.controllers?.navigation?.getCurrentSection() === 'favorites';
     }
 
-    getFavorites() {
-        return this.favorites;
-    }
-
     // Initialise les favoris au chargement (vérifie le statut de toutes les photos visibles)
     async initializeFavorites() {
     try {
@@ -178,7 +174,4 @@ class FavoriteController {
     }
 }
 
-    destroy() {
-        this.favorites = [];
-    }
 }

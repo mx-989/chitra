@@ -7,19 +7,7 @@ class PhotoView {
         this.albumView = new AlbumView();
     }
 
-    // Placeholder quand la Timeline charge
-    showTimelineLoading() {
-        const timelineContent = document.getElementById('timelineContent');
-        if (timelineContent) {
-            timelineContent.innerHTML = `
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                    <span>Chargement des photos...</span>
-                </div>
-            `;
-        }
-    }
-
+    // Placeholder pour les chargements
     showLoading() {
         const loadingSpinner = document.querySelector('.loading-spinner');
         if (loadingSpinner) {
@@ -845,11 +833,7 @@ class PhotoView {
 
         switch (action) {
             case 'copy-link':
-                navigator.clipboard.writeText(photoUrl).then(() => {
-                    showNotification('Lien copié dans le presse-papiers !', 'success');
-                }).catch(() => {
-                    showNotification('Impossible de copier le lien', 'error');
-                });
+                window.app.controllers.photo.copyLinkToClipboard(photoUrl);
                 break;
                 
             case 'twitter':
@@ -970,23 +954,6 @@ class PhotoView {
         }
     }
 
-    validateFile(file) {
-        const maxSize = 10 * 1024 * 1024; 
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-
-        if (!allowedTypes.includes(file.type)) {
-            showNotification(`${file.name} : Format non supporté`, 'error');
-            return false;
-        }
-
-        if (file.size > maxSize) {
-            showNotification(`${file.name} : Fichier trop volumineux (max 50MB)`, 'error');
-            return false;
-        }
-
-        return true;
-    }
-
     setLoadingState(isLoading) {
         const loadingElements = document.querySelectorAll('.loading-spinner');
         const contentElements = document.querySelectorAll('.photo-grid, .albums-grid');
@@ -1004,15 +971,5 @@ class PhotoView {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
-    }
-
-    destroy() {
-        this.photos = [];
-        this.currentPhoto = null;
-        
-        if (this.uploadModal) {
-            this.uploadModal.remove();
-            this.uploadModal = null;
-        }
     }
 }

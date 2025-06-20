@@ -16,34 +16,6 @@ class Comment extends SqlConnect {
         
         return $this->db->lastInsertId();
     }
-
-    public function isPhotoOwner($photoId, $userId) {
-        $query = "SELECT id FROM photos WHERE id = :photo_id AND uploaded_by = :user_id";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([
-            ':photo_id' => $photoId,
-            ':user_id' => $userId
-        ]);
-        
-        return $stmt->fetch() !== false;
-    }
-
-    public function getPhotoPermissions($photoId, $userId) {
-        $query = "select album_id from photos where id = :photo_id";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([':photo_id' => $photoId]);
-        $album = $stmt->fetch(\PDO::FETCH_ASSOC);
-        if (!$album) {
-            return null; 
-        }
-        $query = "select permission from shares where album_id = :album_id and user_id = :user_id";
-
-        
-        $stmt = $this->db->prepare($query);
-        $stmt->execute([':album_id' => $album['album_id'] , ':user_id' => $userId]);
-        
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
-    }
     
     public function getPhotoComments($photoId) {
         $query = "SELECT c.*, u.name as author_name 

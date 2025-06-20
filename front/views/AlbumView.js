@@ -507,7 +507,7 @@ class AlbumView {
         return `
             <form class="album-form" id="albumForm">
                 <div class="form-group">
-                    <label class="form-label" for="albumTitle">Titre *</label>
+                    <label class="form-label" for="albumTitle">Titre</label>
                     <input type="text" id="albumTitle" name="title" class="form-control" 
                            value="${isEdit ? this.escapeHtml(album.title) : ''}" 
                            placeholder="Nom de l'album" required>

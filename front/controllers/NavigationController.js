@@ -16,9 +16,6 @@ class NavigationController {
         document.addEventListener('nav:search', (event) => {
             this.handleSearch(event.detail.query);
         });
-        document.addEventListener('nav:upload', () => {
-            this.showUploadSection();
-        });
         document.addEventListener('nav:logout', () => {
             const logoutEvent = new CustomEvent('auth:logout');
             document.dispatchEvent(logoutEvent);
@@ -66,32 +63,10 @@ class NavigationController {
             }
         });
 
-        const gridView = document.getElementById('gridView');
-        const listView = document.getElementById('listView');
-       
-        if (gridView) {
-            gridView.addEventListener('click', () => {
-                this.setViewMode('grid');
-            });
-        }
-       
-        if (listView) {
-            listView.addEventListener('click', () => {
-                this.setViewMode('list');
-            });
-        }
-
         const searchInput = document.querySelector('.search-bar input');
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 this.handleSearch(e.target.value);
-            });
-        }
-
-        const uploadBtn = document.querySelector('.btn-primary i.fa-upload');
-        if (uploadBtn) {
-            uploadBtn.closest('button').addEventListener('click', () => {
-                this.showUploadSection();
             });
         }
 
@@ -176,25 +151,6 @@ class NavigationController {
         }
     }
 
-    // Bascule entre l'affichage en grille et en liste
-    setViewMode(mode) {
-        const gridView = document.getElementById('gridView');
-        const listView = document.getElementById('listView');
-       
-        if (mode === 'grid') {
-            gridView?.classList.add('active');
-            listView?.classList.remove('active');
-        } else {
-            listView?.classList.add('active');
-            gridView?.classList.remove('active');
-        }
-
-        const contentArea = document.querySelector('.main-content');
-        if (contentArea) {
-            contentArea.setAttribute('data-view-mode', mode);
-        }
-    }
-
     // Recherche en haut de page
     handleSearch(query) {
         if (!query || query.trim() === '') {
@@ -248,29 +204,6 @@ class NavigationController {
     showProfile() {
         this.setActiveSection('profile');
         this.view.showProfileSection();
-    }
-
-    showArchive() {
-        this.view.showArchiveSection();
-        const loadArchiveEvent = new CustomEvent('photo:loadArchived');
-        document.dispatchEvent(loadArchiveEvent);
-    }
-
-    showTrash() {
-        this.view.showTrashSection();
-        const loadTrashEvent = new CustomEvent('photo:loadTrashed');
-        document.dispatchEvent(loadTrashEvent);
-    }
-
-    showUploadSection() {
-        this.view.showUploadSection();
-        this.updatePageTitle('upload');
-        this.clearActiveNav();
-    }
-
-    clearActiveNav() {
-        const navLinks = document.querySelectorAll('.sidebar .nav-link');
-        navLinks.forEach(link => link.classList.remove('active'));
     }
 
     getCurrentSection() {

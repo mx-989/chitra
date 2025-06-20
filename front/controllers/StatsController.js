@@ -30,25 +30,4 @@ class StatsController {
             throw error;
         }
     }
-
-    // Met à jour les tailles de fichiers pour recalculer l'espace de stockage utilisé
-    async updateFileSizes() {
-        try {
-            const response = await fetch(`${this.apiBaseUrl}/update-file-sizes`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Erreur lors de la mise à jour des tailles:', error);
-            throw error;
-        }
-    }
 }
