@@ -391,39 +391,6 @@ class PhotoView {
         }
     };
     document.addEventListener('keydown', escapeHandler);
-
-    if (!document.querySelector('#photo-modal-click-styles')) {
-        const style = document.createElement('style');
-        style.id = 'photo-modal-click-styles';
-        style.textContent = `
-            .photo-modal-image {
-                cursor: pointer;
-            }
-            
-            .photo-modal-info {
-                transition: opacity 0.3s ease, transform 0.3s ease;
-            }
-            
-            .photo-modal-close {
-                transition: opacity 0.3s ease;
-            }
-            
-            .photo-modal-hint {
-                position: fixed;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                color: rgba(255, 255, 255, 0.6);
-                font-size: 13px;
-                text-align: center;
-                padding: 6px 12px;
-                z-index: 10001;
-                transition: opacity 0.3s ease;
-                pointer-events: none;
-            }
-        `;
-        document.head.appendChild(style);
-    }
 }
 
     // Formulaire d'importation de photos
@@ -824,10 +791,6 @@ class PhotoView {
 
         document.body.appendChild(modal);
 
-        if (!document.querySelector('#photo-share-modal-styles')) {
-            this.addPhotoShareModalStyles();
-        }
-
         requestAnimationFrame(() => {
             modal.classList.add('show');
         });
@@ -860,136 +823,6 @@ class PhotoView {
                 this.hideShareModal(modal);
             });
         });
-    }
-
-    addPhotoShareModalStyles() {
-        const style = document.createElement('style');
-        style.id = 'photo-share-modal-styles';
-        style.textContent = `
-            .photo-share-modal {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(40, 40, 40, 0.95);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-                padding: 20px;
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            }
-
-            .photo-share-modal.show {
-                opacity: 1;
-            }
-
-            .photo-share-modal .modal-dialog {
-                background: var(--chitra-card);
-                border-radius: 16px;
-                max-width: 400px;
-                width: 40%;
-                max-height: 85vh;
-                overflow: hidden;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-                border: 1px solid var(--chitra-border);
-                transform: scale(0.9);
-                transition: transform 0.3s ease;
-            }
-
-            .photo-share-modal.show .modal-dialog {
-                transform: scale(1);
-            }
-
-            .photo-share-modal .modal-header {
-                padding: 8px 12px;
-                border-bottom: 1px solid var(--chitra-border);
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                background: var(--chitra-dark);
-                border-radius: 16px 16px 0 0;
-            }
-
-            .photo-share-modal .modal-title {
-                margin: 0;
-                color: var(--chitra-text);
-                font-size: 1.36rem;
-                font-weight: 600;
-            }
-
-            .photo-share-modal .modal-close {
-                background: none;
-                border: none;
-                color: var(--chitra-text-muted);
-                font-size: 1.5rem;
-                cursor: pointer;
-                padding: 8px;
-                border-radius: 8px;
-                transition: all 0.2s ease;
-                width: 40px;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .photo-share-modal .modal-close:hover {
-                color: var(--chitra-text);
-                background: var(--chitra-border);
-            }
-
-            .photo-share-modal .modal-body {
-                padding: 20px;
-                max-height: calc(85vh - 80px);
-                overflow-y: auto;
-            }
-
-            .share-options {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .share-option {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 12px;
-                padding: 16px;
-                background: var(--chitra-dark);
-                border: 1px solid var(--chitra-border);
-                border-radius: 8px;
-                color: var(--chitra-text);
-                cursor: pointer;
-                transition: all 0.2s ease;
-                font-size: 16px;
-                font-weight: 500;
-                text-align: center;
-            }
-
-            .share-option:hover {
-                background: var(--chitra-border);
-                border-color: var(--chitra-primary);
-                transform: translateY(-1px);
-            }
-
-            .share-option i {
-                font-size: 20px;
-                color: var(--chitra-primary);
-            }
-
-            @media (max-width: 768px) {
-                .photo-share-modal .modal-dialog {
-                    margin: 10px;
-                    max-width: none;
-                    max-height: 90vh;
-                }
-            }
-        `;
-        document.head.appendChild(style);
     }
 
     hideShareModal(modal) {

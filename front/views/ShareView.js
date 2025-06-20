@@ -9,29 +9,7 @@ class ShareView {
     }
 
     setupLocationBasedButtonHiding() {
-        this.injectLocationBasedCSS();
         this.observeLocationChanges();
-    }
-
-    injectLocationBasedCSS() {
-        if (document.querySelector('#shared-location-hide-buttons')) return;
-        
-        const style = document.createElement('style');
-        style.id = 'shared-location-hide-buttons';
-        style.textContent = `
-            /* Masquer les boutons edit/share des albums uniquement quand l'URL contient /shared */
-            body[data-location*="/shared"] .album-header-actions [data-action="edit"],
-            body[data-location*="/shared"] .album-header-actions [data-action="share"],
-            body[data-location*="/shared"] .album-header-actions > div[style*="display: flex"] {
-                display: none !important;
-            }
-            
-            /* Mais garder visible le bouton partager des photos */
-            body[data-location*="/shared"] .photo-action[data-action="share"] {
-                display: flex !important;
-            }
-        `;
-        document.head.appendChild(style);
     }
 
     // les 3 prochaines fonctions servent a bien rediriger la navigation vers la liste d'albums partagés
