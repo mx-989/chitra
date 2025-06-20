@@ -139,10 +139,11 @@ class CommentView {
             }
 
             .comments-modal .modal-body {
-                padding: 0;
-                max-height: 60vh;
-                display: flex;
-                flex-direction: column;
+            padding: 0;
+            height: 60vh;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
             }
 
             .comments-container {
@@ -155,7 +156,7 @@ class CommentView {
                 flex: 1;
                 overflow-y: auto;
                 padding: 20px;
-                max-height: 400px;
+                min-height: 0;
             }
 
             .comment-item {
@@ -326,6 +327,18 @@ class CommentView {
                 .comment-input-container button {
                     margin-top: 8px;
                 }
+            }
+
+            .comments-modal .comments-list {
+                flex: 1;
+                overflow-y: auto;
+                padding: 20px;
+                min-height: 0;
+                overscroll-behavior: contain;
+            }
+
+            .comments-modal .modal-dialog {
+                overscroll-behavior: contain;
             }
         `;
         document.head.appendChild(style);
